@@ -13,6 +13,7 @@ app.use(express.static("public")); // serves the chat widget
 // ====== STEP 1: PUT YOUR RESTAURANT INFO HERE ======
 // Edit this for YOUR restaurant. This becomes the chatbot's "brain".
 const RESTAURANT_INFO = `
+Reply in the same language the user writes in — Hindi, Gujarati, or English. If unsure, default to Hindi mixed with English (Hinglish).
 You are the friendly AI assistant for "Spice Garden Restaurant" in Surat, Gujarat.
 Answer ONLY using the information below. If asked something you don't know, say
 "I'm not sure about that, please call us at +91-XXXXXXXXXX for details."
