@@ -3,31 +3,78 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Spice Garden Restaurant - Demo</title>
+<title>Kathiyawadi Rasoi - Surat</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
   body { background: #faf6f0; color: #2b2b2b; }
 
-  /* ---- Demo restaurant page (replace with real site later) ---- */
+  /* ---- Hero ---- */
   .hero {
-    height: 60vh;
-    background: linear-gradient(135deg, #8b2f2f, #d15b2c);
+    min-height: 55vh;
+    background: linear-gradient(135deg, #8b2f2f 0%, #d15b2c 100%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    color: white; text-align: center; padding: 20px;
+    color: white; text-align: center; padding: 40px 20px;
   }
-  .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
-  .hero p { font-size: 1.1rem; opacity: 0.9; }
+  .hero h1 { font-size: 2.6rem; margin-bottom: 8px; font-weight: 700; }
+  .hero .tagline { font-size: 1.15rem; opacity: 0.95; margin-bottom: 18px; font-style: italic; }
+  .badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .badge {
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(4px);
+    padding: 6px 14px; border-radius: 20px; font-size: 0.85rem;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  /* ---- Info strip ---- */
+  .info-strip {
+    display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
+    background: white; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .info-item { text-align: center; font-size: 0.85rem; color: #555; }
+  .info-item strong { display: block; color: #8b2f2f; font-size: 0.95rem; margin-bottom: 2px; }
+
+  /* ---- Content ---- */
   .content { max-width: 700px; margin: 40px auto; padding: 0 20px; }
-  .content h2 { margin-bottom: 10px; color: #8b2f2f; }
-  .content p { line-height: 1.6; margin-bottom: 20px; }
+  .content h2 { margin-bottom: 12px; color: #8b2f2f; font-size: 1.4rem; }
+  .content p { line-height: 1.7; margin-bottom: 20px; color: #444; }
+
+  .why-box {
+    background: white; border-radius: 14px; padding: 24px;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.06); margin-bottom: 30px;
+  }
+  .why-box ul { list-style: none; }
+  .why-box li { padding: 8px 0; padding-left: 28px; position: relative; color: #444; }
+  .why-box li::before { content: "✓"; position: absolute; left: 0; color: #d15b2c; font-weight: bold; }
+
+  /* ---- Chat prompt hint ---- */
+  .chat-hint {
+    text-align: center; padding: 30px 20px; color: #8b2f2f; font-weight: 600;
+  }
 
   /* ---- Chat widget ---- */
   #chat-toggle {
     position: fixed; bottom: 24px; right: 24px;
-    width: 60px; height: 60px; border-radius: 50%;
+    width: 62px; height: 62px; border-radius: 50%;
     background: #8b2f2f; color: white; border: none;
-    font-size: 26px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-    z-index: 1000;
+    font-size: 26px; cursor: pointer; box-shadow: 0 4px 14px rgba(139,47,47,0.4);
+    z-index: 1000; animation: pulse 2.5s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(139,47,47,0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(139,47,47,0); }
+    100% { box-shadow: 0 0 0 0 rgba(139,47,47,0); }
+  }
+  #chat-tooltip {
+    position: fixed; bottom: 34px; right: 96px;
+    background: #2b2b2b; color: white; padding: 8px 14px; border-radius: 8px;
+    font-size: 0.85rem; z-index: 999; white-space: nowrap;
+    animation: fadeInOut 5s ease-in-out 1;
+  }
+  #chat-tooltip::after {
+    content: ""; position: absolute; right: -6px; top: 50%; transform: translateY(-50%);
+    border-left: 6px solid #2b2b2b; border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+  }
+  @keyframes fadeInOut {
+    0% { opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; }
   }
   #chat-window {
     position: fixed; bottom: 96px; right: 24px;
@@ -48,29 +95,60 @@
   #chat-input { flex: 1; border: none; padding: 12px; font-size: 14px; outline: none; }
   #chat-send { background: #8b2f2f; color: white; border: none; padding: 0 18px; cursor: pointer; }
   .typing { font-style: italic; color: #888; font-size: 13px; }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 2rem; }
+    #chat-window { width: 92vw; right: 4vw; height: 70vh; }
+    #chat-tooltip { right: 20px; bottom: 100px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Demo restaurant page -->
+<!-- Hero -->
 <div class="hero">
-  <h1>🍛 Spice Garden Restaurant</h1>
-  <p>Ring Road, Surat — Pure Veg | 11 AM - 11 PM</p>
+  <h1>🍛 Kathiyawadi Rasoi</h1>
+  <p class="tagline">Asli Gujarati Swaad, Ghar Jaisa Pyaar</p>
+  <div class="badges">
+    <span class="badge">⭐ 4.3 Rated</span>
+    <span class="badge">🌿 100% Pure Veg</span>
+    <span class="badge">📍 Ring Road, Surat</span>
+  </div>
 </div>
+
+<!-- Info strip -->
+<div class="info-strip">
+  <div class="info-item"><strong>🕐 Timing</strong>11 AM - 3:30 PM, 7 PM - 11 PM</div>
+  <div class="info-item"><strong>📞 Contact</strong>+91-98765-43210</div>
+  <div class="info-item"><strong>🚚 Delivery</strong>Zomato, Swiggy & Direct</div>
+</div>
+
+<!-- Why this helps (sales pitch for restaurant owner viewing demo) -->
 <div class="content">
-  <h2>Welcome</h2>
-  <p>This is a demo page showing how an AI chatbot can be embedded into any restaurant website. Click the chat icon in the bottom-right corner and ask about menu, timings, delivery, or booking.</p>
+  <div class="why-box">
+    <h2>Why This Helps Your Restaurant</h2>
+    <ul>
+      <li>Customers get instant answers — no calls needed for menu/timing questions</li>
+      <li>Available 24x7, even after closing hours</li>
+      <li>Works in Hindi, Gujarati & English automatically</li>
+      <li>Reduces staff workload during rush hours</li>
+      <li>Scan-and-chat via QR code — no app download needed</li>
+    </ul>
+  </div>
 </div>
+
+<div class="chat-hint">👉 Try it yourself — click the chat icon below and ask anything!</div>
 
 <!-- Chat widget -->
 <button id="chat-toggle">💬</button>
+<div id="chat-tooltip">Ask me anything! 💬</div>
 <div id="chat-window">
   <div id="chat-header">
-    <span>Spice Garden Assistant</span>
+    <span>Kathiyawadi Rasoi Assistant</span>
     <span id="chat-close" style="cursor:pointer;">✕</span>
   </div>
   <div id="chat-messages">
-    <div class="msg bot">Namaste! 🙏 Ask me about our menu, timings, or delivery.</div>
+    <div class="msg bot">Namaste! 🙏 Menu, timing, delivery — kuch bhi poochh sakte hain.</div>
   </div>
   <div id="chat-input-area">
     <input id="chat-input" type="text" placeholder="Type a message..." />
@@ -79,19 +157,25 @@
 </div>
 
 <script>
-  // CHANGE THIS to your deployed backend URL after deployment (Step 3 in README)
-  const API_URL = "https://restaurant-chatbot-xnyx.onrender.com/chat";
+  // CHANGE THIS to your deployed backend URL
+  const API_URL = "https://your-render-url.onrender.com/chat";
 
   const toggle = document.getElementById("chat-toggle");
   const chatWindow = document.getElementById("chat-window");
   const closeBtn = document.getElementById("chat-close");
+  const tooltip = document.getElementById("chat-tooltip");
   const messagesDiv = document.getElementById("chat-messages");
   const input = document.getElementById("chat-input");
   const sendBtn = document.getElementById("chat-send");
 
   let history = [];
 
-  toggle.onclick = () => chatWindow.classList.toggle("open");
+  setTimeout(() => { if (tooltip) tooltip.style.display = "none"; }, 5000);
+
+  toggle.onclick = () => {
+    chatWindow.classList.toggle("open");
+    if (tooltip) tooltip.style.display = "none";
+  };
   closeBtn.onclick = () => chatWindow.classList.remove("open");
 
   function addMessage(text, sender) {
@@ -127,7 +211,7 @@
         addMessage(data.reply, "bot");
         history.push({ role: "user", content: text });
         history.push({ role: "assistant", content: data.reply });
-        if (history.length > 10) history = history.slice(-10); // keep context short
+        if (history.length > 10) history = history.slice(-10);
       } else {
         addMessage("Sorry, something went wrong.", "bot");
       }
